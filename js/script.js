@@ -38,21 +38,16 @@ design.addEventListener('change', (e)=>{
    
 })
 
-// activities.addEventListener('change', (e)=>{
-//     color.removeAttribute("disabled");
-//     console.log("SELECTED",e.target)
-//     for (let i = 0; i < colors.length; i++) {
-//         const value = e.target.value;
-//         const theme = colors[i].getAttribute('data-theme')
-        
-//         if (value === theme) {
-//         colors[i].removeAttribute("disabled");
-//         colors[i].setAttribute('selected', true);
-//         } else {
-//             colors[i].setAttribute("disabled", true);
-//             colors[i].removeAttribute('selected');
-//         }
-//     }
-   
- 
-// })
+activities.addEventListener('change', (e)=>{
+
+       const value = +e.target.getAttribute('data-cost');
+
+       if ( e.target.checked ) {
+        totalCost += value
+       } else {
+        totalCost -= value
+       }
+
+ activitiesCost.innerHTML = `Total: $${totalCost}`;
+})
+
