@@ -5,10 +5,15 @@ const design = document.querySelector("#design");
 const color = document.querySelector("#color");
 const activities = document.querySelector("#activities");
 const activitiesCost = document.querySelector("#activities-cost");
+const paymentSelection = document.querySelector("#payment");
+const creditCard = document.querySelector("#credit-card");
+const paypal = document.querySelector("#paypal");
+const bitcoin = document.querySelector("#bitcoin");
 const colors = color.children;
 let totalCost = 0;
 otherJobRole.type ="hidden"
-
+paypal.style.display = "none"
+bitcoin.style.display = "none"
 jobRole.addEventListener('change', (e)=>{
     if (e.target.value === "other") {
         otherJobRole.type ="text"
@@ -51,3 +56,25 @@ activities.addEventListener('change', (e)=>{
  activitiesCost.innerHTML = `Total: $${totalCost}`;
 })
 
+paymentSelection.children[1].setAttribute('selected', true);
+paymentSelection.addEventListener('change', (e)=>{
+
+    const value = e.target.value;
+    switch (value) {
+        case 'paypal':
+            paypal.style.display = "block";
+            bitcoin.style.display = "none";
+            creditCard.style.display = "none";
+            break;
+        case 'bitcoin':
+            bitcoin.style.display = "block";
+            paypal.style.display = "none";
+            creditCard.style.display = "none";
+            break;
+        case 'credit-card':
+            creditCard.style.display = "block";
+            paypal.style.display = "none";
+            bitcoin.style.display = "none";
+            break;
+      }
+})
