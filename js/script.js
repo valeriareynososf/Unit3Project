@@ -1,16 +1,37 @@
-console.log("test");
 const name = document.querySelector('#name').focus();
 const jobRole = document.querySelector("#title");
 const otherJobRole = document.querySelector("#other-job-role");
+const design = document.querySelector("#design");
+const color = document.querySelector("#color");
+const colors = color.children;
 otherJobRole.type ="hidden"
-console.log("jobRole :",jobRole.value);
+
 jobRole.addEventListener('change', (e)=>{
     if (e.target.value === "other") {
-        console.log("e",e.target.value);
         otherJobRole.type ="text"
     } else {
-        console.log("NO",e.target.value);
         otherJobRole.type ="hidden"
     }
-    console.log("e",e.target.value);
+})
+
+
+color.setAttribute("disabled", true);
+
+design.addEventListener('change', (e)=>{
+    color.removeAttribute("disabled");
+    console.log("SELECTED",e.target)
+    for (let i = 0; i < colors.length; i++) {
+        const value = e.target.value;
+        const theme = colors[i].getAttribute('data-theme')
+        
+        if (value === theme) {
+        colors[i].removeAttribute("disabled");
+        colors[i].setAttribute('selected', true);
+        } else {
+            colors[i].setAttribute("disabled", true);
+            colors[i].removeAttribute('selected');
+        }
+    }
+   
+ 
 })
