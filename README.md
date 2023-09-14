@@ -11,7 +11,7 @@
     cvvInput.addEventListener("keyup", createListener(cvvValidator));
 
     ```
-    The Activities Field used a change event and the validator function was passed to validate with every change.
+    The Activities Field used a change event and the activites validator function was passed to validate with every change.
 
     ```
     activities.addEventListener('change', (e)=>{
@@ -24,7 +24,8 @@
 2. Conditional Error Message
     Error messages provide additional information on type of error.
     
-    validationErrors function 
+    The validationErrors function changes the error message based on the error. The original error messages were stored in a dataset in order to be used conditionally;
+    
     ```
     const emailHint = document.querySelector('#email-hint')
     emailHint.setAttribute("data-error", emailHint.textContent);
