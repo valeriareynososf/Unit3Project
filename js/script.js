@@ -9,13 +9,14 @@ const otherJobRole = document.querySelector("#other-job-role");
 const design = document.querySelector("#design");
 const color = document.querySelector("#color");
 const activities = document.querySelector("#activities");
+const activitiesBox = document.querySelector("#activities-box");
 const checkboxes = document.querySelectorAll('#activities-box input[type="checkbox"]');
 const activitiesCost = document.querySelector("#activities-cost");
 const paymentSelection = document.querySelector("#payment");
 const creditCard = document.querySelector("#credit-card");
 const paypal = document.querySelector("#paypal");
 const bitcoin = document.querySelector("#bitcoin");
-
+const activitiesHint = document.querySelector('#activities-hint');
 
 nameInput.focus()
 const colors = color.children;
@@ -89,31 +90,57 @@ paymentSelection.addEventListener('change', (e)=>{
       }
 })
 
+const validationErrors = (isValid, elementInput) => {
+    if (!isValid) {
+        elementInput.parentElement.classList.add('not-valid');
+        elementInput.parentElement.classList.remove('valid');
+        elementInput.parentElement.lastElementChild.style.display = "block";
+    } else {
+        elementInput.parentElement.classList.add('valid');
+        elementInput.parentElement.classList.remove('not-valid');
+        elementInput.parentElement.lastElementChild.style.display = "none";
+    }
+};
+
 const nameValidator = () => {
-return /^[a-zA-Z]+/.test(nameInput.value)
+    const isValid = /^[a-zA-Z]+/.test(nameInput.value);
+    validationErrors(isValid, nameInput);
+
+return isValid;
 }
 
 const emailValidator = () => {
-    return /^[^@]+@[^@.]+\.[a-zA-Z]+$/i.test(emailInput.value)
+    const isValid = /^[^@]+@[^@.]+\.[a-zA-Z]+$/i.test(emailInput.value);
+
+    validationErrors(isValid, emailInput);
+
+    return isValid;
     }
 
 const activitiesValidator = () => {
-    const checked = Array.from(checkboxes).some(checkbox => checkbox.checked)
-    console.log("checkboxes", checked)
+    const isValid = Array.from(checkboxes).some(checkbox => checkbox.checked);
 
-    return checked;
+    validationErrors(isValid, activitiesBox);
+
+    return isValid;
      }
 
 const ccValidator = () => {
   
     if (paymentSelection.value == "credit-card") {
-    //The "Card number" must contain a 13 - 16 digits without dashes or spaces
+        //The "Card number" must contain a 13 - 16 digits without dashes or spaces
         const isNumValid = /\b(\d{13,16})\b/.test(cardNumberInput.value);
 
-//  The "Zip code" field must contain a 5-digit number
-const isZipValid = /\b(\d{5})\b/.test(zipInput.value);
-// The "CVV" field must contain a 3-digit number
-const isCVValid = /\b(\d{3})\b/.test(cvvInput.value);
+        //  The "Zip code" field must contain a 5-digit number
+        const isZipValid = /\b(\d{5})\b/.test(zipInput.value);
+
+        // The "CVV" field must contain a 3-digit number
+        const isCVValid = /\b(\d{3})\b/.test(cvvInput.value);
+
+        validationErrors(isNumValid, cardNumberInput);
+        validationErrors(isZipValid, zipInput);
+        validationErrors(isCVValid, cvvInput);
+      
 
         return (isNumValid && isZipValid && isCVValid)
     } else return true;
@@ -122,21 +149,14 @@ const isCVValid = /\b(\d{3})\b/.test(cvvInput.value);
 
 
 form.addEventListener('submit', (e)=>{
-  
-    e.preventDefault()
-    
-
+   // e.preventDefault();
     const isValidName = nameValidator()
     const isValidEmail = emailValidator()
     const isValidActivities = activitiesValidator()
     const isValidCC = ccValidator()
-    //const valid = /^[a-zA-Z ]+/.test(nameValue)
-    // const valid = /^[a-z]+$/.test(nameValue)
-    // console.log("isValidActivities",isValidActivities)
-    // console.log("isValidName",isValidName)
-    // console.log("isValidEmai",isValidEmail)
-    // console.log("iisValidCC", isValidCC)
+
     if (!isValidName || !isValidEmail || !isValidActivities || !isValidCC) {
+        console.log("no")
         e.preventDefault();
     }
 })
@@ -150,4 +170,23 @@ return e => {
 }
 }
 
-nameInput.addEventListener("input", createListener(nameValidator))
+nameInput.addEventListener("input", createListener(nameValidator));
+emailInput.addEventListener("input", createListener(emailValidator));
+
+
+for (let i = 0; i < checkboxes.length; i++) { 
+
+checkboxes[i].addEventListener('focus', () => {
+console.log(checkboxes[i])
+checkboxes[i].parentElement.classList.add('focus')
+})
+
+checkboxes[i].addEventListener('blur', () => {
+    console.log(checkboxes[i])
+    checkboxes[i].parentElement.classList.remove('focus')
+})
+
+}
+
+
+    
