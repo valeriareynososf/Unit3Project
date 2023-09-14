@@ -178,7 +178,7 @@ const activitiesValidator = () => {
 const zipValidator = () => {
     if (paymentSelection.value !== "credit-card") return true;
    //  The "Zip code" field must contain a 5-digit number
-   const isValid = /\b(\d{5})\b/.test(zipInput.value);
+   const isValid = /\b(^\d{5}$)\b/.test(zipInput.value.trim());
 
    validationErrors(isValid, zipInput);
 
@@ -189,7 +189,7 @@ const zipValidator = () => {
 const cvvValidator = () => {
     if (paymentSelection.value !== "credit-card") return true;
     // The "CVV" field must contain a 3-digit number
-    const isValid = /\b(\d{3})\b/.test(cvvInput.value);
+    const isValid = /\b(^\d{3}$)\b/.test(cvvInput.value.trim());
     
     validationErrors(isValid, cvvInput);
  
@@ -201,7 +201,7 @@ const ccValidator = () => {
     if (paymentSelection.value !== "credit-card") return true;
 
     //The "Card number" must contain a 13 - 16 digits without dashes or spaces
-    const isNumValid = /\b(\d{13,16})\b/.test(cardNumberInput.value);
+    const isNumValid = /\b(^\d{13,16}$)\b/.test(cardNumberInput.value.trim());
 
     validationErrors(isNumValid, cardNumberInput);
       
