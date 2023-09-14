@@ -59,8 +59,6 @@ activities.addEventListener('change', (e)=>{
        const value = +e.target.getAttribute('data-cost');
        const dateValue = e.target.getAttribute('data-day-and-time');
 
-
-    console.log("dateValue:", dateValue)
        if ( e.target.checked ) {
         totalCost += value
 
@@ -85,7 +83,7 @@ activities.addEventListener('change', (e)=>{
        }
 
  activitiesCost.innerHTML = `Total: $${totalCost}`;
-
+ activitiesValidator()
 })
 
 
@@ -111,18 +109,46 @@ paymentSelection.addEventListener('change', (e)=>{
       }
 })
 
+//storing orignal error messages
+const emailHint = document.querySelector('#email-hint')
+emailHint.setAttribute("data-error", emailHint.textContent);
+
+const ccNumHint = document.querySelector('#cc-hint')
+ccNumHint.setAttribute("data-error", ccNumHint.textContent);
+
+const zipHint = document.querySelector('#zip-hint')
+zipHint.setAttribute("data-error", zipHint.textContent);
+
+const cvvHint = document.querySelector('#cvv-hint')
+cvvHint.setAttribute("data-error", cvvHint.textContent);
+
+
 const validationErrors = (isValid, elementInput) => {
-    if (!isValid) {
+    const element = elementInput.parentElement.lastElementChild;
+
+    const elementId = elementInput.id === 'email' ? 'Email' : 
+                    elementInput.id === 'cc-num' ? 'Credit card number':
+                    elementInput.id === 'zip' ? 'Zip Code': 'CVV';
+
+    if (elementInput.id !== 'activities-box' && elementInput.id !== 'name' && !elementInput.value.trim()) {
+
+        element.textContent = `${elementId} field cannot be blank`;
+        element.style.display = "block";
+        elementInput.parentElement.classList.add('not-valid');
+    } else if (!isValid) {
+        
         elementInput.parentElement.classList.add('not-valid');
         elementInput.parentElement.classList.remove('valid');
-        elementInput.parentElement.lastElementChild.style.display = "block";
+        element.dataset.error ? element.textContent = element.dataset.error : null;
+        element.style.display = "block";
     } else {
         elementInput.parentElement.classList.add('valid');
         elementInput.parentElement.classList.remove('not-valid');
-        elementInput.parentElement.lastElementChild.style.display = "none";
+        element.style.display = "none";
     }
 };
 
+// validates name
 const nameValidator = () => {
     const isValid = /^[a-zA-Z]+/.test(nameInput.value);
     validationErrors(isValid, nameInput);
@@ -130,6 +156,7 @@ const nameValidator = () => {
 return isValid;
 }
 
+// validates email
 const emailValidator = () => {
     const isValid = /^[^@]+@[^@.]+\.[a-zA-Z]+$/i.test(emailInput.value);
 
@@ -138,6 +165,7 @@ const emailValidator = () => {
     return isValid;
     }
 
+    // validates activites
 const activitiesValidator = () => {
     const isValid = Array.from(checkboxes).some(checkbox => checkbox.checked);
 
@@ -146,37 +174,52 @@ const activitiesValidator = () => {
     return isValid;
      }
 
+// validates zip code
+const zipValidator = () => {
+    if (paymentSelection.value !== "credit-card") return true;
+   //  The "Zip code" field must contain a 5-digit number
+   const isValid = /\b(\d{5})\b/.test(zipInput.value);
+
+   validationErrors(isValid, zipInput);
+
+   return isValid;
+    }
+ 
+// validates cvv 
+const cvvValidator = () => {
+    if (paymentSelection.value !== "credit-card") return true;
+    // The "CVV" field must contain a 3-digit number
+    const isValid = /\b(\d{3})\b/.test(cvvInput.value);
+    
+    validationErrors(isValid, cvvInput);
+ 
+    return isValid;
+     }
+         
+// validates credit card number
 const ccValidator = () => {
-  
-    if (paymentSelection.value == "credit-card") {
-        //The "Card number" must contain a 13 - 16 digits without dashes or spaces
-        const isNumValid = /\b(\d{13,16})\b/.test(cardNumberInput.value);
+    if (paymentSelection.value !== "credit-card") return true;
 
-        //  The "Zip code" field must contain a 5-digit number
-        const isZipValid = /\b(\d{5})\b/.test(zipInput.value);
+    //The "Card number" must contain a 13 - 16 digits without dashes or spaces
+    const isNumValid = /\b(\d{13,16})\b/.test(cardNumberInput.value);
 
-        // The "CVV" field must contain a 3-digit number
-        const isCVValid = /\b(\d{3})\b/.test(cvvInput.value);
-
-        validationErrors(isNumValid, cardNumberInput);
-        validationErrors(isZipValid, zipInput);
-        validationErrors(isCVValid, cvvInput);
+    validationErrors(isNumValid, cardNumberInput);
       
-
-        return (isNumValid && isZipValid && isCVValid)
-    } else return true;
+    return isNumValid
 
         }
 
 
 form.addEventListener('submit', (e)=>{
-   // e.preventDefault();
+
     const isValidName = nameValidator()
     const isValidEmail = emailValidator()
     const isValidActivities = activitiesValidator()
     const isValidCC = ccValidator()
+    const isValidZip = zipValidator()
+    const isValidCVV = cvvValidator()
 
-    if (!isValidName || !isValidEmail || !isValidActivities || !isValidCC) {
+    if (!isValidName || !isValidEmail || !isValidActivities || !isValidCC || !isValidZip || !isValidCVV) {
         e.preventDefault();
     }
 })
@@ -184,14 +227,15 @@ form.addEventListener('submit', (e)=>{
 const createListener = (validator) => {
 return e => {
     const text = e.target.value;
-    const valid = validator(text);
-    // console.log("text",text)
-    // console.log("valid",valid)
+    validator(text);
 }
 }
 
 nameInput.addEventListener("keyup", createListener(nameValidator));
 emailInput.addEventListener("keyup", createListener(emailValidator));
+cardNumberInput.addEventListener("keyup", createListener(ccValidator));
+zipInput.addEventListener("keyup", createListener(zipValidator));
+cvvInput.addEventListener("keyup", createListener(cvvValidator));
 
 
 for (const checkbox of checkboxes) { 
