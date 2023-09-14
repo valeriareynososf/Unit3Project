@@ -24,8 +24,8 @@
 2. Conditional Error Message
     Error messages provide additional information on type of error.
     
-    The validationErrors function changes the error message based on the error. The original error messages were stored in a dataset in order to be used conditionally;
-    
+    The validationErrors function changes the error message based on the error. The original error messages were stored in a dataset in order to be used conditionally.
+
     ```
     const emailHint = document.querySelector('#email-hint')
     emailHint.setAttribute("data-error", emailHint.textContent);
