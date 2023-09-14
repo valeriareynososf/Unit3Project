@@ -23,23 +23,24 @@
     ```
 2. Conditional Error Message
     Error messages provide additional information on type of error.
-
+    
+    validationErrors function 
     ```
     const emailHint = document.querySelector('#email-hint')
-emailHint.setAttribute("data-error", emailHint.textContent);
+    emailHint.setAttribute("data-error", emailHint.textContent);
 
-const ccNumHint = document.querySelector('#cc-hint')
-ccNumHint.setAttribute("data-error", ccNumHint.textContent);
+    const ccNumHint = document.querySelector('#cc-hint')
+    ccNumHint.setAttribute("data-error", ccNumHint.textContent);
 
-const zipHint = document.querySelector('#zip-hint')
-zipHint.setAttribute("data-error", zipHint.textContent);
+    const zipHint = document.querySelector('#zip-hint')
+    zipHint.setAttribute("data-error", zipHint.textContent);
 
-const cvvHint = document.querySelector('#cvv-hint')
-cvvHint.setAttribute("data-error", cvvHint.textContent);
+    const cvvHint = document.querySelector('#cvv-hint')
+    cvvHint.setAttribute("data-error", cvvHint.textContent);
 
 
-const validationErrors = (isValid, elementInput) => {
-    const element = elementInput.parentElement.lastElementChild;
+    const validationErrors = (isValid, elementInput) => {
+        const element = elementInput.parentElement.lastElementChild;
 
     const elementId = elementInput.id === 'email' ? 'Email' : 
                     elementInput.id === 'cc-num' ? 'Credit card number':
@@ -61,6 +62,6 @@ const validationErrors = (isValid, elementInput) => {
         elementInput.parentElement.classList.remove('not-valid');
         element.style.display = "none";
     }
-};
+    };
     ```
 
