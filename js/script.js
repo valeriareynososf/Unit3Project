@@ -39,16 +39,16 @@ jobRole.addEventListener('change', (e)=>{
 design.addEventListener('change', (e)=>{
     color.removeAttribute("disabled");
 
-    for (let i = 0; i < colors.length; i++) {
+    for (const color of colors) { 
         const value = e.target.value;
-        const theme = colors[i].getAttribute('data-theme')
+        const theme = color.getAttribute('data-theme')
         
         if (value === theme) {
-        colors[i].removeAttribute("disabled");
-        colors[i].setAttribute('selected', true);
+        color.removeAttribute("disabled");
+        color.setAttribute('selected', true);
         } else {
-            colors[i].setAttribute("disabled", true);
-            colors[i].removeAttribute('selected');
+            color.setAttribute("disabled", true);
+            color.removeAttribute('selected');
         }
     }
    
@@ -57,14 +57,35 @@ design.addEventListener('change', (e)=>{
 activities.addEventListener('change', (e)=>{
 
        const value = +e.target.getAttribute('data-cost');
+       const dateValue = e.target.getAttribute('data-day-and-time');
 
+
+    console.log("dateValue:", dateValue)
        if ( e.target.checked ) {
         totalCost += value
+
+        for (const checkbox of checkboxes) { 
+            const checkboxDate = checkbox.getAttribute('data-day-and-time');
+            if (checkbox !== e.target && dateValue === checkboxDate) {
+                checkbox.setAttribute("disabled", true);
+                checkbox.parentNode.classList.add('disabled')
+            }
+        }
        } else {
         totalCost -= value
+
+        for (const checkbox of checkboxes) { 
+            const checkboxDate = checkbox.getAttribute('data-day-and-time');
+            if (checkbox !== e.target && dateValue === checkboxDate) {
+                checkbox.removeAttribute("disabled");
+                checkbox.parentNode.classList.remove('disabled')
+            }
+        }
+       
        }
 
  activitiesCost.innerHTML = `Total: $${totalCost}`;
+
 })
 
 
@@ -156,7 +177,6 @@ form.addEventListener('submit', (e)=>{
     const isValidCC = ccValidator()
 
     if (!isValidName || !isValidEmail || !isValidActivities || !isValidCC) {
-        console.log("no")
         e.preventDefault();
     }
 })
@@ -170,20 +190,18 @@ return e => {
 }
 }
 
-nameInput.addEventListener("input", createListener(nameValidator));
-emailInput.addEventListener("input", createListener(emailValidator));
+nameInput.addEventListener("keyup", createListener(nameValidator));
+emailInput.addEventListener("keyup", createListener(emailValidator));
 
 
-for (let i = 0; i < checkboxes.length; i++) { 
+for (const checkbox of checkboxes) { 
 
-checkboxes[i].addEventListener('focus', () => {
-console.log(checkboxes[i])
-checkboxes[i].parentElement.classList.add('focus')
+checkbox.addEventListener('focus', () => {
+checkbox.parentElement.classList.add('focus')
 })
 
-checkboxes[i].addEventListener('blur', () => {
-    console.log(checkboxes[i])
-    checkboxes[i].parentElement.classList.remove('focus')
+checkbox.addEventListener('blur', () => {
+    checkbox.parentElement.classList.remove('focus')
 })
 
 }
