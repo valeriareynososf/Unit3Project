@@ -36,6 +36,26 @@ jobRole.addEventListener('change', (e)=>{
 })
 
 
+// design.addEventListener('change', (e)=>{
+//     color.removeAttribute("disabled");
+
+//     for (let i = 0; i < colors.length; i++) { 
+//         const color = colors[i];
+//         const value = e.target.value;
+//         const theme = color.getAttribute('data-theme')
+        
+//         if (value === theme) {
+//         color.removeAttribute("disabled");
+//         theme === 'heart js' ? colors[4].setAttribute('selected', true) : colors[1].setAttribute('selected', true) 
+//         } else {
+//             color.setAttribute("disabled", true);
+//             color.removeAttribute('selected');
+//         }
+//     }
+   
+// })
+
+
 design.addEventListener('change', (e)=>{
     color.removeAttribute("disabled");
 
@@ -45,13 +65,12 @@ design.addEventListener('change', (e)=>{
         
         if (value === theme) {
         color.removeAttribute("disabled");
-        color.setAttribute('selected', true);
+        colors[4].setAttribute('selected', true);
         } else {
             color.setAttribute("disabled", true);
             color.removeAttribute('selected');
         }
     }
-   
 })
 
 activities.addEventListener('change', (e)=>{
